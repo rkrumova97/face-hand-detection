@@ -23,7 +23,7 @@ public class FaceRecognition {
 
         ArrayList<Mat> images = new ArrayList<>();
         ArrayList<Integer> labels = new ArrayList<>();
-        String csvFilePath = "R:\\Projects\\IdeaProjects\\FaceDetection\\src\\main\\resources\\TrainingData.txt";
+        String csvFilePath = "src/main/resources/TrainingData.txt";
         readCSV(csvFilePath, images, labels);
 
 
@@ -61,7 +61,7 @@ public class FaceRecognition {
 
     }
 
-    public static int predict(Mat testSample, FaceRecognizer fish) {
+    public static double predict(Mat testSample, FaceRecognizer fish) {
 
         IntPointer l = new IntPointer(1);
         DoublePointer confidence = new DoublePointer(1);

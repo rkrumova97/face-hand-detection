@@ -57,9 +57,9 @@ public class SceneController {
     @FXML
     private CheckBox lbpClassifier;
 
-    private final String HAAR = "R:\\Projects\\IdeaProjects\\FaceDetection\\src\\main\\resources\\hand.xml";
+    private final String HAAR = "src/main/resources/haarcascade_frontalface_alt.xml";
 
-    private final String LBP = "R:\\Projects\\IdeaProjects\\FaceDetection\\src\\main\\resources\\lbpcascade_frontalface.xml";
+    private final String LBP = "src/main/resources/lbpcascade_frontalface.xml";
 
 
     public void init(Stage primaryStage) {
@@ -118,9 +118,24 @@ public class SceneController {
         fileChooser.setTitle("Open Resource File");
 
         chooseImage.setOnAction(e -> {
-            File file = fileChooser.showOpenDialog(primaryStage);
-            Image image = new Image(file.toURI().toString());
-            originalFrame.setImage(image);
+            if (faceRecognizer[0] == null) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setHeaderText("TRAIN THE ALGORITHM");
+                alert.showAndWait();
+            } else {
+                File file = fileChooser.showOpenDialog(primaryStage);
+                Image image = new Image(file.toURI().toString());
+                originalFrame.setImage(image);
+
+                BufferedImage bufferedImage = new BufferedImage(92, 112, TYPE_BYTE_GRAY);
+                bufferedImage = SwingFXUtils.fromFXImage(originalFrame.getImage(), bufferedImage);
+                opencv_core.Mat mat = toMat(bufferedImage);
+                cvtColor(mat, mat, COLOR_BGR2GRAY);
+
+                double predict = FaceRecognition.predict(mat, faceRecognizer[0]);
+                label.setVisible(true);
+                label.setText("Prediction = " + ((predict == 100) ? "Rumy" : "Someone"));
+            }
         });
 
         predict.setOnAction(e -> {
@@ -129,21 +144,10 @@ public class SceneController {
                 alert.setHeaderText("TRAIN THE ALGORITHM");
                 alert.showAndWait();
             } else {
-                if (cameraButton.getText().equals("Stop Camera")) {
-                    if (haarClassifier.isSelected()) {
-                        CameraUtil.startCamera(originalFrame, haarClassifier, lbpClassifier, cameraButton, HAAR, true, faceRecognizer[0]);
-                    } else {
-                        CameraUtil.startCamera(originalFrame, haarClassifier, lbpClassifier, cameraButton, LBP, true, faceRecognizer[0]);
-                    }
+                if (haarClassifier.isSelected()) {
+                    CameraUtil.startCamera(originalFrame, haarClassifier, lbpClassifier, cameraButton, HAAR, true, faceRecognizer[0]);
                 } else {
-                    BufferedImage bufferedImage = new BufferedImage(92, 112, TYPE_BYTE_GRAY);
-                    bufferedImage = SwingFXUtils.fromFXImage(originalFrame.getImage(), bufferedImage);
-                    opencv_core.Mat mat = toMat(bufferedImage);
-                    cvtColor(mat, mat, COLOR_BGR2GRAY);
-
-                    int predict = FaceRecognition.predict(mat, faceRecognizer[0]);
-                    label.setVisible(true);
-                    label.setText("Prediction = " + ((predict == 100) ? "Rumy" : "Someone"));
+                    CameraUtil.startCamera(originalFrame, haarClassifier, lbpClassifier, cameraButton, LBP, true, faceRecognizer[0]);
                 }
             }
         });

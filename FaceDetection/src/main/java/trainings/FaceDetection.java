@@ -32,8 +32,6 @@ public class FaceDetection {
             absoluteFaceSize = Math.round(height * 0.01f);
         }
 
-
-
         // detect faces
         faceCascade.detectMultiScale(grayFrame, faces, 1.1, 2, CASCADE_SCALE_IMAGE,
                 new Size(absoluteFaceSize, absoluteFaceSize), new Size(height, height));
@@ -52,12 +50,12 @@ public class FaceDetection {
                 equalizeHist(croppedImage, croppedImage);
                 // Resize the image to a default size
                 Mat resizeImage = new Mat();
-                Size size = new Size(112, 92);
+                Size size = new Size(92, 112);
                 resize(croppedImage, resizeImage, size);
-                int algorithm = FaceRecognition.predict(resizeImage, faceRecognition);
+                double algorithm = FaceRecognition.predict(resizeImage, faceRecognition);
                 int pos_x = Math.max(rect.tl().x() - 10, 0);
                 int pos_y = Math.max(rect.tl().y() - 10, 0);
-                putText(frame, "Prediction = " + ((algorithm == 100) ? "Rumy" : "Someone"), new Point(pos_x, pos_y),
+                putText(frame, "Prediction = " + ((algorithm == 100) ? "Rumy" : "Someone") , new Point(pos_x, pos_y),
                         FONT_HERSHEY_PLAIN, 1.0, new Scalar(0, 255, 0, 2.0));
             }
         }
