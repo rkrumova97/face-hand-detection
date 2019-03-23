@@ -14,7 +14,7 @@ public class Main extends Application {
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("scene.fxml"));
             AnchorPane root = loader.load();
-            root.setStyle("-fx-background-color: whitesmoke;");
+            root.setStyle("-fx-background-color: #4280f5;");
             Scene scene = new Scene(root, 800, 600);
             primaryStage.setTitle("Face Detection and Tracking");
             primaryStage.setScene(scene);

@@ -123,7 +123,7 @@ public class CameraUtil {
             // the camera is not active at this point
             cameraActive = false;
             // update again the button content
-            cameraButton.setText("Start Camera");
+            cameraButton.setText("Hand recognition");
 
             stopTimer(originalFrame);
 

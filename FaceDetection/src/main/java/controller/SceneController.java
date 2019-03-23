@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_face;
 import trainings.FaceRecognition;
+import trainings.HandDetector;
 import util.CameraUtil;
 
 import java.awt.image.BufferedImage;
@@ -46,6 +47,9 @@ public class SceneController {
     public Label label;
 
     @FXML
+    public Button hand;
+
+    @FXML
     private Button cameraButton;
 
     @FXML
@@ -60,7 +64,6 @@ public class SceneController {
     private final String HAAR = "src/main/resources/haarcascade_frontalface_alt.xml";
 
     private final String LBP = "src/main/resources/lbpcascade_frontalface.xml";
-
 
     public void init(Stage primaryStage) {
         final opencv_face.FaceRecognizer[] faceRecognizer = {null};
@@ -149,6 +152,13 @@ public class SceneController {
                 } else {
                     CameraUtil.startCamera(originalFrame, haarClassifier, lbpClassifier, cameraButton, LBP, true, faceRecognizer[0]);
                 }
+            }
+        });
+
+        hand.setOnAction(e -> {
+            CameraUtil.startCamera(originalFrame, hand);
+            if(HandDetector.isDetected()){
+                CameraUtil.alert();
             }
         });
     }

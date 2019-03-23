@@ -331,6 +331,5 @@ public class HandDetector {
 
         putText(resultImg, dynamicGestureName[dynamicGesture.getGesture()], new Point(560, 20), CV_FONT_HERSHEY_COMPLEX, 0.7, new Scalar(255, 0, 0, 0));
     }
-
 }
 
